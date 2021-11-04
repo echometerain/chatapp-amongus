@@ -1,6 +1,8 @@
 module github.com/echometerain/chatapp-amongus
 
-require github.com/gorilla/websocket v1.4.2 // indirect
+require (
+	github.com/gorilla/websocket v1.4.2 // indirect
+)
 
 require (
 	github.com/bwmarrin/discordgo v0.23.2
