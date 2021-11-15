@@ -5,13 +5,13 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/emirpasic/gods/sets/hashset"
 )
 
 var dg *discordgo.Session
-var gamers map[string]string = make(map[string]string)
+var gamers map[string]*hashset.Set = make(map[string]*hashset.Set)
 
 func discord() { // init function
-
 	var err error
 	dg, err = discordgo.New("Bot " + key)
 	if err != nil {
@@ -30,8 +30,8 @@ func messageListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	if strings.ToLower(m.Message.Content) == "start discord among us" {
-		dg.MessageReactionAdd(m.ChannelID, m.MessageReference.MessageID, "ballot_box_with_check")
-		gamers[m.Message.ID] = m.Message.Author.ID
+		dg.MessageReactionAdd(m.ChannelID, m.Message.ID, "☑️")
+		gamers[m.Message.ID] = hashset.New(m.Message.Author.ID)
 	}
 }
 func reactionListener(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
@@ -40,7 +40,7 @@ func reactionListener(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	}
 	value, exists := gamers[m.MessageID]
 	if exists {
-		value = m.MessageReaction.UserID
+		fmt.Print("hi")
 	}
 	fmt.Print(value)
 }
