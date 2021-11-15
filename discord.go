@@ -5,11 +5,10 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/emirpasic/gods/maps/hashmap"
 )
 
 var dg *discordgo.Session
-var set *hashmap.map[string]string = hashmap.New()
+var gamers map[string]string = make(map[string]string)
 
 func discord() { // init function
 
@@ -32,12 +31,16 @@ func messageListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	if strings.ToLower(m.Message.Content) == "start discord among us" {
 		dg.MessageReactionAdd(m.ChannelID, m.MessageReference.MessageID, "ballot_box_with_check")
-		set.Add(m.Message.ID)
+		gamers[m.Message.ID] = m.Message.Author.ID
 	}
 }
 func reactionListener(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
-	if m.UserID == s.State.User.ID { // don't recieve orders from itself and bots
+	if m.MessageReaction.UserID == s.State.User.ID { // don't recieve orders from itself and bots
 		return
 	}
-
+	value, exists := gamers[m.MessageID]
+	if exists {
+		value = m.MessageReaction.UserID
+	}
+	fmt.Print(value)
 }
