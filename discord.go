@@ -5,13 +5,14 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/emirpasic/gods/sets/hashset"
+	"github.com/emirpasic/gods/maps/hashmap"
 )
 
 var dg *discordgo.Session
-var mset set = hashset.New()
+var set *hashmap.map[string]string = hashmap.New()
 
 func discord() { // init function
+
 	var err error
 	dg, err = discordgo.New("Bot " + key)
 	if err != nil {
@@ -31,9 +32,12 @@ func messageListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 	if strings.ToLower(m.Message.Content) == "start discord among us" {
 		dg.MessageReactionAdd(m.ChannelID, m.MessageReference.MessageID, "ballot_box_with_check")
-
+		set.Add(m.Message.ID)
 	}
 }
-func reactionListener(s *discordgo.Session, m *discordgo.MessageCreate) {
+func reactionListener(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
+	if m.UserID == s.State.User.ID { // don't recieve orders from itself and bots
+		return
+	}
 
 }
