@@ -17,3 +17,7 @@ func mapLoad() [][]rune {
 	}
 	return runeArr
 }
+func startGame() {
+
+	overworld := mapLoad()
+}

@@ -49,6 +49,8 @@ func messageListen(s *discordgo.Session, m *discordgo.MessageCreate) {
 		<-timer.C
 		if gamers[m.Message.ID].Size() < minPlayers {
 			s.ChannelMessageSend(m.ChannelID, "Not enough players! ("+strconv.Itoa(minPlayers)+" required)")
+		} else {
+			startGame()
 		}
 	}
 }
